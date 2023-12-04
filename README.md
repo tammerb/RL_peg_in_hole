@@ -6,5 +6,5 @@ Depends on https://github.com/jr-robotics/robo-gym and https://github.com/jr-rob
 
 Running the example:
 - Spin up the docker-compose
-- In the Robot Server terminal, run `roslaunch mir100_robot_server sim_robot_server.launch gui:=true`
-- In the Environment Server, run 
+- In the Robot Server terminal, run `start-server-manager`
+- In the Environment Server, navigate to the `environments` directory and run `python3 random_ur5e_agent.py`
