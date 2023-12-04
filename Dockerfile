@@ -1,17 +1,16 @@
 FROM ros:noetic
 
 SHELL ["/bin/bash", "-c"]
-##
-### Install python dependencies
-##RUN pip3 install matplotlib --upgrade && \
-##    pip3 install roboflow opencv-python
-##
+
 ### Install ROS dependencies
 RUN echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list \
  && sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654 \
  && apt-get update && apt-get install --no-install-recommends -y \
  && apt-get install apt-utils build-essential psmisc vim-gtk git swig sudo libcppunit-dev python3-catkin-tools python3-rosdep python3-pip python3-rospkg python3-future python3-osrf-pycommon -y \
  && rm -rf /var/lib/apt/lists/*
+
+### Install python dependencies
+RUN pip install protobuf==3.20 stable-baselines3[extra]
 
 ### Set the working directory in the container
 WORKDIR /root/robogym_ws/src
@@ -36,3 +35,7 @@ RUN apt-get update \
  && catkin init \
  && source /opt/ros/$ROS_DISTRO/setup.bash \
  && catkin build
+
+ ### Add the sourcing of ROS and ROS workspace to .bashrc
+ RUN printf "ROBOGYM_WS=~/robogym_ws\n" >> ~/.bashrc
+ RUN printf "source /opt/ros/$ROS_DISTRO/setup.bash\nsource $ROBOGYM_WS/devel/setup.bash" >> ~/.bashrc
